@@ -1,14 +1,14 @@
 {
   "app": {
     "name": "Soumatou",
-    "description": "Save the Graffiti",
-    "uri": "https://soumatou-2022-polygon-buidl-it.vercel.app",
-    "defaultLog": "Soumatou enables you to discover graffiti and archive it using IPFS and polygon NFT.",
+    "description": "Save the memory",
+    "uri": "https://soumatou.vercel.app/",
+    "defaultLog": "Soumatou enables you to archive memory using IPFS and Klaytn NFT.",
     "layout": "dynamic"
   },
   "links": {
     "github": {
-      "uri": "https://github.com/HackerSamuraiDAO/2022-Polygon-BUIDL-IT-submission"
+      "uri": "https://github.com/taijusanagi/soumatou"
     }
   },
   "wallets": {
