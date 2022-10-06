@@ -1,0 +1,45 @@
+{
+  "app": {
+    "name": "Soumatou",
+    "description": "Save the Graffiti",
+    "uri": "https://soumatou-2022-polygon-buidl-it.vercel.app",
+    "defaultLog": "Soumatou enables you to discover graffiti and archive it using IPFS and polygon NFT.",
+    "layout": "dynamic"
+  },
+  "links": {
+    "github": {
+      "uri": "https://github.com/HackerSamuraiDAO/2022-Polygon-BUIDL-IT-submission"
+    }
+  },
+  "wallets": {
+    "injected": {
+      "name": "Metamask",
+      "icon": "metamask.webp",
+      "connector": "ingectedConnector"
+    },
+    "walletConnect": {
+      "name": "Wallet Connect",
+      "icon": "walletConnect.png",
+      "connector": "walletConnectConnector"
+    }
+  },
+  "styles": {
+    "button": {
+      "rounded": "lg",
+      "size": "md",
+      "fontSize": "sm"
+    },
+    "text": {
+      "color": {
+        "primary": "gray.800",
+        "secondary": "gray.400"
+      }
+    },
+    "background": {
+      "color": {
+        "main": "white",
+        "layout": "gray.200"
+      }
+    }
+  }
+}
