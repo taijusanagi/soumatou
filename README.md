@@ -1,6 +1,6 @@
 ## Soumatou
 
-[!image](./docs/screenshot.png)
+![image](./docs/screenshot.png)
 
 ### Concept
 
