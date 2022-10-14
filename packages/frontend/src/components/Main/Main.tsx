@@ -160,19 +160,27 @@ export const Main: React.FC = () => {
       signer
     );
 
-    const lat = currentLocation.lat;
-    const latDecimalLength = countDecimals(lat);
-    const latNum = lat * 10 ** latDecimalLength;
-    const latFormatted = Math.floor(latNum).toString();
-    const lng = currentLocation.lng;
-    const lngDecimalLength = countDecimals(lng);
-    const lngNum = lng * 10 ** lngDecimalLength;
-    const lngFormatted = Math.floor(lngNum).toString();
+    // const lat = currentLocation.lat;
+    // const latDecimalLength = countDecimals(lat);
+    // const latNum = lat * 10 ** latDecimalLength;
+    // const latFormatted = Math.floor(latNum).toString();
+    // const lng = currentLocation.lng;
+    // const lngDecimalLength = countDecimals(lng);
+    // const lngNum = lng * 10 ** lngDecimalLength;
+    // const lngFormatted = Math.floor(lngNum).toString();
+    // const location = {
+    //   lat: latFormatted.toString(),
+    //   latDecimalLength,
+    //   lng: lngFormatted.toString(),
+    //   lngDecimalLength,
+    // };
+
+    // location data is managed in ipfs, so this is dummy data for demo
     const location = {
-      lat: latFormatted.toString(),
-      latDecimalLength,
-      lng: lngFormatted.toString(),
-      lngDecimalLength,
+      lat: 0,
+      latDecimalLength: 0,
+      lng: 0,
+      lngDecimalLength: 0,
     };
     const tx = await contract.mint(to, location, imageURI, modelURI, uri);
     const receipt = await tx.wait();

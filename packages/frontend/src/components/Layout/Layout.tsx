@@ -1,4 +1,13 @@
-import { Box, Center, Container, Fade, Flex, Image, Stack, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Container,
+  Fade,
+  Flex,
+  Image,
+  Stack,
+  useDisclosure,
+} from "@chakra-ui/react";
 import React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 
@@ -25,12 +34,15 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   React.useEffect(() => {
     navigator.geolocation.getCurrentPosition((geo) => {
       console.log("set", geo.coords.latitude, geo.coords.longitude);
-      setCurrentLocation({ lat: geo.coords.latitude, lng: geo.coords.longitude });
+      setCurrentLocation({
+        lat: geo.coords.latitude,
+        lng: geo.coords.longitude,
+      });
     });
   }, [setCurrentLocation]);
 
   React.useEffect(() => {
-    sleep(4000).then(() => {
+    sleep(2000).then(() => {
       onClose();
       sleep(500).then(() => {
         setMode("app");
@@ -44,7 +56,12 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         {mode === "intro" && (
           <Center height="100vh">
             <Fade in={isOpen}>
-              <Image src="/img/brands/anime.gif" objectFit={"contain"} maxW="56" alt="anime" />
+              <Image
+                src="/img/brands/anime.gif"
+                objectFit={"contain"}
+                maxW="56"
+                alt="anime"
+              />
             </Fade>
           </Center>
         )}
