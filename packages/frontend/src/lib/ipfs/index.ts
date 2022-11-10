@@ -25,7 +25,8 @@ export const metadata = async (
   image: File,
   animation_url: File,
   latitude: number,
-  longitude: number
+  longitude: number,
+  prompt: string
 ) => {
   const data = await client.store({
     name,
@@ -40,6 +41,10 @@ export const metadata = async (
       {
         trait_type: "Longitude",
         value: longitude.toString(),
+      },
+      {
+        trait_type: "Prompt",
+        value: prompt,
       },
     ],
   });

@@ -3,8 +3,8 @@
     "chainId": 1001,
     "name": "Klaytn Testnet Baobab",
     "contracts": {
-      "soumatou": "0x9af9eE7729efa8F3C0a897b4B8ffc6230E013cd5",
-      "aggregator": "0x3cAFE755F5c1B601eE7FF042B549d4424Fa4fD2f"
+      "soumatou": "0xE163720E5B28D0cD416A34810E1ca0ce030D1D57",
+      "aggregator": "0x3d273092d3cDf527Fb555292Ca2823D023448ac9"
     },
     "rpc": "https://public-node-api.klaytnapi.com/v1/baobab"
   }

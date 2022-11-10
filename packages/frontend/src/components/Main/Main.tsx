@@ -50,6 +50,7 @@ export const Main: React.FC = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const [modalMode, setModalMode] = React.useState<ModalMode>("input");
+
   const [nftMinted, setNFTMinted] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -68,6 +69,8 @@ export const Main: React.FC = () => {
 
   const { chain } = useNetwork();
 
+  const [isProcessing, setIsProcessing] = React.useState(false);
+
   // const { initMap } = use3dMap();
 
   const clear = () => {
@@ -79,6 +82,7 @@ export const Main: React.FC = () => {
   };
 
   const mainModeChange = async () => {
+    setIsProcessing(true);
     if (!currentLocation.lat || !currentLocation.lng) {
       alert("please enable location. this app requires your location.");
       return;
@@ -146,7 +150,8 @@ export const Main: React.FC = () => {
       imageFile,
       modelFile,
       currentLocation.lat,
-      currentLocation.lng
+      currentLocation.lng,
+      text
     );
 
     console.log(uri);
@@ -160,28 +165,21 @@ export const Main: React.FC = () => {
       signer
     );
 
-    // const lat = currentLocation.lat;
-    // const latDecimalLength = countDecimals(lat);
-    // const latNum = lat * 10 ** latDecimalLength;
-    // const latFormatted = Math.floor(latNum).toString();
-    // const lng = currentLocation.lng;
-    // const lngDecimalLength = countDecimals(lng);
-    // const lngNum = lng * 10 ** lngDecimalLength;
-    // const lngFormatted = Math.floor(lngNum).toString();
-    // const location = {
-    //   lat: latFormatted.toString(),
-    //   latDecimalLength,
-    //   lng: lngFormatted.toString(),
-    //   lngDecimalLength,
-    // };
-
-    // location data is managed in ipfs, so this is dummy data for demo
+    const lat = currentLocation.lat;
+    const latDecimalLength = countDecimals(lat);
+    const latNum = lat * 10 ** latDecimalLength;
+    const latFormatted = Math.floor(latNum).toString();
+    const lng = currentLocation.lng;
+    const lngDecimalLength = countDecimals(lng);
+    const lngNum = lng * 10 ** lngDecimalLength;
+    const lngFormatted = Math.floor(lngNum).toString();
     const location = {
-      lat: 0,
-      latDecimalLength: 0,
-      lng: 0,
-      lngDecimalLength: 0,
+      lat: latFormatted.toString(),
+      latDecimalLength,
+      lng: lngFormatted.toString(),
+      lngDecimalLength,
     };
+    // location data is managed in ipfs, so this is dummy data for demo
     const tx = await contract.mint(to, location, imageURI, modelURI, uri);
     const receipt = await tx.wait();
     console.log(receipt);
@@ -193,36 +191,60 @@ export const Main: React.FC = () => {
   };
 
   const onClickTokenOn2d = (tokenId: string) => {
+    setIsProcessing(false);
+    console.log("tokenId", tokenId);
     setModalMode("modelPreview");
     const token = tokens.find((token: any) => {
       return ethers.BigNumber.from(token.tokenId).toString() === tokenId;
     }) as any;
-    const url = token.imageURI.replace("ipfs://", "https://ipfs.io/ipfs/");
+    console.log(token);
+    const url = token.imageURI.replace(
+      "ipfs://",
+      "https://nftstorage.link/ipfs/"
+    );
+    console.log(url);
     setNFTMinted(true);
     setTokenId(tokenId);
     setImage(url);
     onOpen();
   };
 
+  React.useEffect(() => {
+    axios
+      .get(`${window.location.origin}/api/tokens`)
+      .then(({ data }) => {
+        console.log(data);
+        setTokens(data);
+      })
+      .catch((e) => {
+        console.error(e.message);
+      });
+  }, []);
+
   return (
     <Box minHeight={"100vh"} w={"full"} position="relative">
-      {mapMode === "2d" && (
-        <Map
-          onClickToken={onClickTokenOn2d}
-          tokens={tokens}
-          cLat={currentLocation.lat}
-          cLng={currentLocation.lng}
-          lat={threeLocation.lat}
-          lng={threeLocation.lng}
-        />
-      )}
-      {mapMode === "3d" && (
-        <ThreeMap
-          onClickToken={onClickTokenOn2d}
-          tokens={tokens}
-          lat={threeLocation.lat}
-          lng={threeLocation.lng}
-        />
+      {threeLocation.lat !== 0 && threeLocation.lng !== 0 && (
+        <>
+          {mapMode === "2d" && (
+            <Map
+              onClickToken={onClickTokenOn2d}
+              tokens={tokens}
+              cLat={currentLocation.lat}
+              cLng={currentLocation.lng}
+              lat={threeLocation.lat}
+              lng={threeLocation.lng}
+            />
+          )}
+          {mapMode === "3d" && (
+            <ThreeMap
+              // isOn={mapMode === "3d"}
+              onClickToken={onClickTokenOn2d}
+              tokens={tokens}
+              lat={threeLocation.lat}
+              lng={threeLocation.lng}
+            />
+          )}
+        </>
       )}
       <Box bottom="8" position="absolute" w="full">
         <Flex justify={"center"} position="relative">
@@ -235,7 +257,7 @@ export const Main: React.FC = () => {
         <Stack spacing="4">
           {modalMode === "input" && (
             <FormControl>
-              <FormLabel>Input your memory</FormLabel>
+              <FormLabel>Input your memory prompt</FormLabel>
               <Input
                 type="text"
                 value={text}
@@ -276,10 +298,10 @@ export const Main: React.FC = () => {
                 isLoading={isLoading}
                 shadow="md"
               >
-                Create Soumatou
+                Generate
               </Button>
             )}
-            {modalMode === "modelPreview" && (
+            {modalMode === "modelPreview" && isProcessing && (
               <ConnectWalletWrapper w="full">
                 <Button
                   w="full"
