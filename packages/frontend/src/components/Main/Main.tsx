@@ -38,11 +38,6 @@ import { Model } from "./Model";
 
 export type ModalMode = "input" | "modelPreview" | "completed";
 
-const countDecimals = function (value: number) {
-  if (Math.floor(value) === value) return 0;
-  return value.toString().split(".")[1].length || 0;
-};
-
 export const Main: React.FC = () => {
   const mapMode = useRecoilValue(mapState);
   const threeLocation = useRecoilValue(locationState);
@@ -50,6 +45,7 @@ export const Main: React.FC = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const [modalMode, setModalMode] = React.useState<ModalMode>("input");
+
   const [nftMinted, setNFTMinted] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
 
