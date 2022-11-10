@@ -20,7 +20,7 @@ export const Header: React.FC<HeaderProps> = ({ position, top }) => {
     <Box p="4" as="header" w="full" position={position} top={top} zIndex="10">
       <Flex justify="space-between" align="center">
         <Link href="/">
-          <Image src="/img/brands/logo.png" h="10" alt="logo" />
+          {/* <Image src="/img/brands/logo.png" h="10" alt="logo" /> */}
         </Link>
         <Stack direction={"row"}>
           <ConnectWalletWrapper mode="icon">

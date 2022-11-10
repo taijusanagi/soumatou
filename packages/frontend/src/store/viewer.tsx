@@ -2,7 +2,7 @@ import { atom } from "recoil";
 
 export const mapState = atom({
   key: "mapState",
-  default: "2d",
+  default: "3d",
 });
 
 export const isIntervalOn = atom({
@@ -13,8 +13,8 @@ export const isIntervalOn = atom({
 export const locationState = atom({
   key: "location",
   default: {
-    lat: 35.65925011569792,
-    lng: 139.70066309372865,
+    lat: 0,
+    lng: 0,
   },
 });
 

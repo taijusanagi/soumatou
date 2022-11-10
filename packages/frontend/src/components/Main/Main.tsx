@@ -202,23 +202,28 @@ export const Main: React.FC = () => {
 
   return (
     <Box minHeight={"100vh"} w={"full"} position="relative">
-      {mapMode === "2d" && (
-        <Map
-          onClickToken={onClickTokenOn2d}
-          tokens={tokens}
-          cLat={currentLocation.lat}
-          cLng={currentLocation.lng}
-          lat={threeLocation.lat}
-          lng={threeLocation.lng}
-        />
-      )}
-      {mapMode === "3d" && (
-        <ThreeMap
-          onClickToken={onClickTokenOn2d}
-          tokens={tokens}
-          lat={threeLocation.lat}
-          lng={threeLocation.lng}
-        />
+      {threeLocation.lat !== 0 && threeLocation.lng !== 0 && (
+        <>
+          {mapMode === "2d" && (
+            <Map
+              onClickToken={onClickTokenOn2d}
+              tokens={tokens}
+              cLat={currentLocation.lat}
+              cLng={currentLocation.lng}
+              lat={threeLocation.lat}
+              lng={threeLocation.lng}
+            />
+          )}
+          {mapMode === "3d" && (
+            <ThreeMap
+              // isOn={mapMode === "3d"}
+              onClickToken={onClickTokenOn2d}
+              tokens={tokens}
+              lat={threeLocation.lat}
+              lng={threeLocation.lng}
+            />
+          )}
+        </>
       )}
       <Box bottom="8" position="absolute" w="full">
         <Flex justify={"center"} position="relative">
@@ -231,7 +236,7 @@ export const Main: React.FC = () => {
         <Stack spacing="4">
           {modalMode === "input" && (
             <FormControl>
-              <FormLabel>Input your memory</FormLabel>
+              <FormLabel>Input your memory prompt</FormLabel>
               <Input
                 type="text"
                 value={text}
@@ -272,7 +277,7 @@ export const Main: React.FC = () => {
                 isLoading={isLoading}
                 shadow="md"
               >
-                Create Soumatou
+                Generate
               </Button>
             )}
             {modalMode === "modelPreview" && (

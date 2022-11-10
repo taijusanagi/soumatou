@@ -14,7 +14,7 @@ import { useRecoilState } from "recoil";
 
 import config from "../../../config.json";
 import { sleep } from "../../lib/utils/sleep";
-import { currentLocationState } from "../../store/viewer";
+import { locationState } from "../../store/viewer";
 // import { Footer } from "../Footer";
 import { Header } from "../Header";
 // import { Logger } from "../Logger";
@@ -37,7 +37,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   // const [appMode, setAppMode] = React.useState<PageMode>("lp");
 
-  const [, setCurrentLocation] = useRecoilState(currentLocationState);
+  const [location, setLocation] = useRecoilState(locationState);
 
   const clickStart = () => {
     setMode("app");
@@ -46,12 +46,12 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   React.useEffect(() => {
     navigator.geolocation.getCurrentPosition((geo) => {
       console.log("set", geo.coords.latitude, geo.coords.longitude);
-      setCurrentLocation({
+      setLocation({
         lat: geo.coords.latitude,
         lng: geo.coords.longitude,
       });
     });
-  }, [setCurrentLocation]);
+  }, [setLocation]);
 
   React.useEffect(() => {
     sleep(2000).then(() => {
@@ -73,7 +73,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                   <Image
                     src="/img/brands/anime.gif"
                     objectFit={"contain"}
-                    maxW="50%"
+                    maxW="60%"
                     alt="anime"
                   />
                 </Center>
@@ -82,12 +82,20 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             {animeMode === "done" && (
               <Center minHeight={"100vh"}>
                 <Stack spacing="16">
-                  <Model image="/img/brands/key.png" />
+                  <Box h="300">
+                    <Model image="/img/brands/key.png" />
+                  </Box>
                   <Stack spacing="4">
                     <Text fontSize="xl" fontWeight={"bold"} color="yellow.800">
                       Curve the Moment into Metaverse
                     </Text>
-                    <Button onClick={clickStart} colorScheme="yellow" size="lg">
+                    <Button
+                      onClick={clickStart}
+                      colorScheme="yellow"
+                      size="lg"
+                      isLoading={location.lat === 0 || location.lng === 0}
+                      loadingText="Loading Location"
+                    >
                       Start
                     </Button>
                   </Stack>

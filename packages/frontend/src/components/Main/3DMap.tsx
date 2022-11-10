@@ -2,7 +2,14 @@ import { Box } from "@chakra-ui/react";
 import { Status, Wrapper } from "@googlemaps/react-wrapper";
 import { ethers } from "ethers";
 import React from "react";
-import { AmbientLight, DirectionalLight, Matrix4, PerspectiveCamera, Scene, WebGLRenderer } from "three";
+import {
+  AmbientLight,
+  DirectionalLight,
+  Matrix4,
+  PerspectiveCamera,
+  Scene,
+  WebGLRenderer,
+} from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 export interface MapProps {
@@ -21,43 +28,48 @@ export interface MapProps {
   }[];
 }
 
-export const InternalMap: React.FC<MapProps> = ({ onClickToken, lat, lng, tokens }) => {
+export const InternalMap: React.FC<MapProps> = ({
+  onClickToken,
+  lat,
+  lng,
+  tokens,
+}) => {
   const [map, setMap] = React.useState<google.maps.Map>();
-  const [renderer, setRenderer] = React.useState<any>();
 
-  const mapOptions = {
-    tilt: 0,
-    heading: 0,
-    zoom: 18,
-    center: {
-      lat,
-      lng,
-    },
-    mapId: "f505bd029047b70",
-    disableDefaultUI: true,
-    gestureHandling: "none",
-    keyboardShortcuts: false,
-  };
+  React.useEffect(() => {
+    console.log("initMap");
 
-  function initMap(): void {
+    const mapOptions = {
+      tilt: 0,
+      heading: 0,
+      zoom: 18,
+      center: {
+        lat,
+        lng,
+      },
+      mapId: "f505bd029047b70",
+      disableDefaultUI: true,
+      gestureHandling: "none",
+      keyboardShortcuts: false,
+    };
+
     const mapDiv = document.getElementById("map") as HTMLElement;
     const map = new google.maps.Map(mapDiv, mapOptions);
     setMap(map);
-    initWebglOverlayView(map);
-  }
 
-  function initWebglOverlayView(map: google.maps.Map): void {
     const webglOverlayView = new google.maps.WebGLOverlayView();
     const scene = new Scene();
     const camera = new PerspectiveCamera();
     const loader = new GLTFLoader();
+
     webglOverlayView.onAdd = () => {
       const ambientLight = new AmbientLight(0xffffff, 0.75);
       scene.add(ambientLight);
       const directionalLight = new DirectionalLight(0xffffff, 0.25);
       directionalLight.position.set(0.5, -1, 0.5);
       scene.add(directionalLight);
-      const source = "https://raw.githubusercontent.com/googlemaps/js-samples/main/assets/pin.gltf";
+      const source =
+        "https://raw.githubusercontent.com/googlemaps/js-samples/main/assets/pin.gltf";
       loader.load(source, (gltf) => {
         gltf.scene.scale.set(10, 10, 10);
         gltf.scene.rotation.x = Math.PI;
@@ -66,12 +78,13 @@ export const InternalMap: React.FC<MapProps> = ({ onClickToken, lat, lng, tokens
     };
 
     webglOverlayView.onContextRestored = ({ gl }) => {
+      console.log("onContextRestored", map);
       const renderer = new WebGLRenderer({
         canvas: gl.canvas,
         context: gl,
         ...gl.getContextAttributes(),
       });
-      setRenderer(renderer);
+
       renderer.autoClear = false;
 
       loader.manager.onLoad = () => {
@@ -92,6 +105,7 @@ export const InternalMap: React.FC<MapProps> = ({ onClickToken, lat, lng, tokens
     };
 
     webglOverlayView.onDraw = ({ gl, transformer }): void => {
+      console.log("onDraw", map);
       const latLngAltitudeLiteral: google.maps.LatLngAltitudeLiteral = {
         lat: mapOptions.center.lat,
         lng: mapOptions.center.lng,
@@ -101,16 +115,12 @@ export const InternalMap: React.FC<MapProps> = ({ onClickToken, lat, lng, tokens
       camera.projectionMatrix = new Matrix4().fromArray(matrix);
 
       webglOverlayView.requestRedraw();
-      if (renderer) {
-        renderer.render(scene, camera);
-        renderer.resetState();
-      }
     };
     webglOverlayView.setMap(map);
-  }
 
-  React.useEffect(() => {
-    initMap();
+    return () => {
+      webglOverlayView.unbindAll();
+    };
   }, []);
 
   React.useEffect(() => {
@@ -133,7 +143,12 @@ export const InternalMap: React.FC<MapProps> = ({ onClickToken, lat, lng, tokens
   return <Box id={"map"} w="100wh" h="100vh" />;
 };
 
-export const ThreeMap: React.FC<MapProps> = ({ onClickToken, lat, lng, tokens }) => {
+export const ThreeMap: React.FC<MapProps> = ({
+  onClickToken,
+  lat,
+  lng,
+  tokens,
+}) => {
   const render = (status: Status) => {
     switch (status) {
       case Status.LOADING:
@@ -141,9 +156,21 @@ export const ThreeMap: React.FC<MapProps> = ({ onClickToken, lat, lng, tokens })
       case Status.FAILURE:
         return <>failure</>;
       case Status.SUCCESS:
-        return <InternalMap onClickToken={onClickToken} tokens={tokens} lat={lat} lng={lng} />;
+        return (
+          <InternalMap
+            onClickToken={onClickToken}
+            tokens={tokens}
+            lat={lat}
+            lng={lng}
+          />
+        );
     }
   };
 
-  return <Wrapper apiKey={"AIzaSyAjoE50sTKo2lQv1UeWWHGJueWP70sXBhU"} render={render} />;
+  return (
+    <Wrapper
+      apiKey={"AIzaSyAjoE50sTKo2lQv1UeWWHGJueWP70sXBhU"}
+      render={render}
+    />
+  );
 };

@@ -24,7 +24,14 @@ export interface MapProps {
   }[];
 }
 
-export const InternalMap: React.FC<MapProps> = ({ onClickToken, cLat, cLng, lat, lng, tokens }) => {
+export const InternalMap: React.FC<MapProps> = ({
+  onClickToken,
+  cLat,
+  cLng,
+  lat,
+  lng,
+  tokens,
+}) => {
   const [_isIntervalOn, setIsIntervalOn] = useRecoilState(isIntervalOn);
   const [, setLocation] = useRecoilState(locationState);
   const ref = React.useRef<HTMLDivElement>(null);
@@ -64,12 +71,11 @@ export const InternalMap: React.FC<MapProps> = ({ onClickToken, cLat, cLng, lat,
   }, [ref]);
 
   React.useEffect(() => {
-    console.log(map, cLat, cLng);
-    if (!map || !cLat || !cLng) {
+    if (!map || !lat || !lng) {
       return;
     }
-    map.setCenter({ lat: cLat, lng: cLng });
-  }, [map, cLat, cLng]);
+    map.setCenter({ lat, lng });
+  }, [map, lat, lng]);
 
   React.useEffect(() => {
     if (!map || tokens.length === 0) {
@@ -91,7 +97,14 @@ export const InternalMap: React.FC<MapProps> = ({ onClickToken, cLat, cLng, lat,
   return <Box ref={ref} w="100wh" h="100vh"></Box>;
 };
 
-export const Map: React.FC<MapProps> = ({ onClickToken, cLat, cLng, lat, lng, tokens }) => {
+export const Map: React.FC<MapProps> = ({
+  onClickToken,
+  cLat,
+  cLng,
+  lat,
+  lng,
+  tokens,
+}) => {
   const render = (status: Status) => {
     switch (status) {
       case Status.LOADING:
@@ -99,9 +112,23 @@ export const Map: React.FC<MapProps> = ({ onClickToken, cLat, cLng, lat, lng, to
       case Status.FAILURE:
         return <>failure</>;
       case Status.SUCCESS:
-        return <InternalMap onClickToken={onClickToken} cLat={cLat} cLng={cLng} tokens={tokens} lat={lat} lng={lng} />;
+        return (
+          <InternalMap
+            onClickToken={onClickToken}
+            cLat={cLat}
+            cLng={cLng}
+            tokens={tokens}
+            lat={lat}
+            lng={lng}
+          />
+        );
     }
   };
 
-  return <Wrapper apiKey={"AIzaSyAjoE50sTKo2lQv1UeWWHGJueWP70sXBhU"} render={render} />;
+  return (
+    <Wrapper
+      apiKey={"AIzaSyAjoE50sTKo2lQv1UeWWHGJueWP70sXBhU"}
+      render={render}
+    />
+  );
 };
