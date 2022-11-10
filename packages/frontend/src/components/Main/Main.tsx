@@ -38,6 +38,11 @@ import { Model } from "./Model";
 
 export type ModalMode = "input" | "modelPreview" | "completed";
 
+const countDecimals = function (value: number) {
+  if (Math.floor(value) === value) return 0;
+  return value.toString().split(".")[1].length || 0;
+};
+
 export const Main: React.FC = () => {
   const mapMode = useRecoilValue(mapState);
   const threeLocation = useRecoilValue(locationState);
@@ -142,7 +147,8 @@ export const Main: React.FC = () => {
       imageFile,
       modelFile,
       currentLocation.lat,
-      currentLocation.lng
+      currentLocation.lng,
+      text
     );
 
     console.log(uri);
@@ -156,28 +162,21 @@ export const Main: React.FC = () => {
       signer
     );
 
-    // const lat = currentLocation.lat;
-    // const latDecimalLength = countDecimals(lat);
-    // const latNum = lat * 10 ** latDecimalLength;
-    // const latFormatted = Math.floor(latNum).toString();
-    // const lng = currentLocation.lng;
-    // const lngDecimalLength = countDecimals(lng);
-    // const lngNum = lng * 10 ** lngDecimalLength;
-    // const lngFormatted = Math.floor(lngNum).toString();
-    // const location = {
-    //   lat: latFormatted.toString(),
-    //   latDecimalLength,
-    //   lng: lngFormatted.toString(),
-    //   lngDecimalLength,
-    // };
-
-    // location data is managed in ipfs, so this is dummy data for demo
+    const lat = currentLocation.lat;
+    const latDecimalLength = countDecimals(lat);
+    const latNum = lat * 10 ** latDecimalLength;
+    const latFormatted = Math.floor(latNum).toString();
+    const lng = currentLocation.lng;
+    const lngDecimalLength = countDecimals(lng);
+    const lngNum = lng * 10 ** lngDecimalLength;
+    const lngFormatted = Math.floor(lngNum).toString();
     const location = {
-      lat: 0,
-      latDecimalLength: 0,
-      lng: 0,
-      lngDecimalLength: 0,
+      lat: latFormatted.toString(),
+      latDecimalLength,
+      lng: lngFormatted.toString(),
+      lngDecimalLength,
     };
+    // location data is managed in ipfs, so this is dummy data for demo
     const tx = await contract.mint(to, location, imageURI, modelURI, uri);
     const receipt = await tx.wait();
     console.log(receipt);

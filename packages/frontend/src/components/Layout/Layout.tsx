@@ -14,7 +14,7 @@ import { useRecoilState } from "recoil";
 
 import config from "../../../config.json";
 import { sleep } from "../../lib/utils/sleep";
-import { locationState } from "../../store/viewer";
+import { currentLocationState, locationState } from "../../store/viewer";
 // import { Footer } from "../Footer";
 import { Header } from "../Header";
 // import { Logger } from "../Logger";
@@ -38,6 +38,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   // const [appMode, setAppMode] = React.useState<PageMode>("lp");
 
   const [location, setLocation] = useRecoilState(locationState);
+  const [, setCurrentLocation] = useRecoilState(currentLocationState);
 
   const clickStart = () => {
     setMode("app");
@@ -50,8 +51,12 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         lat: geo.coords.latitude,
         lng: geo.coords.longitude,
       });
+      setCurrentLocation({
+        lat: geo.coords.latitude,
+        lng: geo.coords.longitude,
+      });
     });
-  }, [setLocation]);
+  }, [setLocation, setCurrentLocation]);
 
   React.useEffect(() => {
     sleep(2000).then(() => {
