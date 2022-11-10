@@ -29,3 +29,16 @@ https://baobab.scope.klaytn.com/account/0x9af9ee7729efa8f3c0a897b4b8ffc6230e013c
 
 Created Asset
 https://testnets.opensea.io/assets/baobab/0x9af9eE7729efa8F3C0a897b4B8ffc6230E013cd5/4
+
+## Finalist
+
+I modified the app after being accepted as a finalist to make it better.
+https://github.com/taijusanagi/soumatou/pull/1
+
+## New Contract
+
+Deployed Contract
+https://baobab.scope.klaytn.com/account/0xE163720E5B28D0cD416A34810E1ca0ce030D1D57
+
+Created Asset
+https://testnets.opensea.io/assets/baobab/0xE163720E5B28D0cD416A34810E1ca0ce030D1D57/0
