@@ -1,7 +1,7 @@
 {
   "app": {
     "name": "Soumatou",
-    "description": "Save the memory",
+    "description": "Curve the Moment into Metaverse",
     "uri": "https://soumatou.vercel.app/",
     "defaultLog": "Soumatou enables you to archive memory using IPFS and Klaytn NFT.",
     "layout": "dynamic"
