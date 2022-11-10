@@ -69,6 +69,8 @@ export const Main: React.FC = () => {
 
   const { chain } = useNetwork();
 
+  const [isProcessing, setIsProcessing] = React.useState(false);
+
   // const { initMap } = use3dMap();
 
   const clear = () => {
@@ -80,6 +82,7 @@ export const Main: React.FC = () => {
   };
 
   const mainModeChange = async () => {
+    setIsProcessing(true);
     if (!currentLocation.lat || !currentLocation.lng) {
       alert("please enable location. this app requires your location.");
       return;
@@ -188,16 +191,35 @@ export const Main: React.FC = () => {
   };
 
   const onClickTokenOn2d = (tokenId: string) => {
+    setIsProcessing(false);
+    console.log("tokenId", tokenId);
     setModalMode("modelPreview");
     const token = tokens.find((token: any) => {
       return ethers.BigNumber.from(token.tokenId).toString() === tokenId;
     }) as any;
-    const url = token.imageURI.replace("ipfs://", "https://ipfs.io/ipfs/");
+    console.log(token);
+    const url = token.imageURI.replace(
+      "ipfs://",
+      "https://nftstorage.link/ipfs/"
+    );
+    console.log(url);
     setNFTMinted(true);
     setTokenId(tokenId);
     setImage(url);
     onOpen();
   };
+
+  React.useEffect(() => {
+    axios
+      .get(`${window.location.origin}/api/tokens`)
+      .then(({ data }) => {
+        console.log(data);
+        setTokens(data);
+      })
+      .catch((e) => {
+        console.error(e.message);
+      });
+  }, []);
 
   return (
     <Box minHeight={"100vh"} w={"full"} position="relative">
@@ -279,7 +301,7 @@ export const Main: React.FC = () => {
                 Generate
               </Button>
             )}
-            {modalMode === "modelPreview" && (
+            {modalMode === "modelPreview" && isProcessing && (
               <ConnectWalletWrapper w="full">
                 <Button
                   w="full"

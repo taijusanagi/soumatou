@@ -37,7 +37,7 @@ export const InternalMap: React.FC<MapProps> = ({
   const [map, setMap] = React.useState<google.maps.Map>();
 
   React.useEffect(() => {
-    console.log("initMap");
+    // console.log("initMap");
 
     const mapOptions = {
       tilt: 0,
@@ -78,7 +78,7 @@ export const InternalMap: React.FC<MapProps> = ({
     };
 
     webglOverlayView.onContextRestored = ({ gl }) => {
-      console.log("onContextRestored", map);
+      // console.log("onContextRestored", map);
       const renderer = new WebGLRenderer({
         canvas: gl.canvas,
         context: gl,
@@ -105,7 +105,7 @@ export const InternalMap: React.FC<MapProps> = ({
     };
 
     webglOverlayView.onDraw = ({ gl, transformer }): void => {
-      console.log("onDraw", map);
+      // console.log("onDraw", map);
       const latLngAltitudeLiteral: google.maps.LatLngAltitudeLiteral = {
         lat: mapOptions.center.lat,
         lng: mapOptions.center.lng,
@@ -130,7 +130,7 @@ export const InternalMap: React.FC<MapProps> = ({
     for (const token of tokens) {
       const marker = new google.maps.Marker({
         position: { lat: token.location.lat, lng: token.location.lng },
-        icon: "/img/brands/pin.png",
+        icon: "/img/brands/soumatou-2.png",
         map,
       });
       marker.addListener("click", () => {

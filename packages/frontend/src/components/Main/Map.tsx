@@ -84,7 +84,7 @@ export const InternalMap: React.FC<MapProps> = ({
     for (const token of tokens) {
       const marker = new google.maps.Marker({
         position: { lat: token.location.lat, lng: token.location.lng },
-        icon: "/img/brands/pin.png",
+        icon: "/img/brands/soumatou-2.png",
         map,
       });
       marker.addListener("click", () => {
